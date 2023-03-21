@@ -1,0 +1,130 @@
+<html>
+
+<head>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"
+        type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+     <div class="container" data-ribbon="kfc Register"></div>
+<form action="/log-in" style="    margin-top: 10em;" method="POST">
+    <div class="container">
+        <h5 style="font-family: cursive;
+    font-size: 25px;
+    text-align: center;
+}">Sign In <br><br><img
+                src="https://login.kfc.co.in/auth/resources/jdsrg/login/kfcIndiaLoginUIDev_2022_08_04/images/KFC_logo.svg"></img>
+        </h5>
+        <br>
+        <br>
+        <div style="text-align: -webkit-center;">
+            <div class="form-group">
+                <div class="form-outline w-50">
+
+                    <input type="text" class="form-control" name="email" placeholder="Email" required="required">
+                </div>
+
+            </div>
+            <br>
+            <div class="form-group">
+                <div class="form-outline w-50">
+
+                    <input type="password" id="ex3" class="form-control" name="password" placeholder="Password"
+                        required="required">
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <div class="form-outline w-50">
+                    <button style="font-family: cursive;" type="submit" class="btn btn-block butt">Sign In</button>
+                </div>
+
+            </div>
+            <p style="font-family: cursive;" class="hint-text"> Create account with your email <a
+                    href="/signup">SignUp?</a></p>
+            <br>
+
+            <a style="color: black;
+    font-family: cursive;" href="/"> <i class="fa fa-arrow-circle-o-left"></i> Back to Home</a>
+        </div>
+</form>
+</body>
+
+</div>
+<style>
+      .container {
+  --d:6px;  /* folded part */
+  --c:#e4002b; /* color */
+  --f:16px; /* ribbon font-size */
+  position: relative;
+  font-family: cursive;
+}
+.container::before {
+  content: attr(data-ribbon);
+  font-size:var(--f);
+  /* I : position & coloration */
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(29.29%, -100%) rotate(45deg);
+  transform-origin: bottom left;
+  padding: 5px 35px calc(var(--d) + 5px);
+  background: linear-gradient(rgba(0,0,0,0.5) 0 0) bottom/100% var(--d) no-repeat var(--c);
+  /* II : clipping */
+  clip-path: polygon(0 0,100% 0,100% 100%,calc(100% - var(--d)) calc(100% - var(--d)),var(--d) calc(100% - var(--d)) , 0 100%);
+  /* III : masking */
+  -webkit-mask: 
+      linear-gradient( 135deg, transparent calc(50% - var(--d)*0.707),#fff 0) bottom left,
+      linear-gradient(-135deg, transparent calc(50% - var(--d)*0.707),#fff 0) bottom right;
+  -webkit-mask-size:300vmax 300vmax;
+  -webkit-mask-composite: destination-in;
+   mask-composite: intersect;
+}
+    .butt {
+        background: black;
+        color: antiquewhite;
+    }
+
+    .input-group-addon {
+        max-width: 42px;
+        text-align: center;
+        background: none;
+        border-bottom: 1px solid #ced4da;
+        padding-right: 5px;
+        border-radius: 0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: normal;
+        font-size: 13px;
+    }
+
+    .form-control {
+        min-height: 38px;
+        padding-left: 5px;
+        box-shadow: none !important;
+        border-width: 0 0 1px 0;
+        border-radius: 0;
+    }
+
+    .form-control:focus {
+        border-color: #ccc;
+    }
+</style>
+
+</html>

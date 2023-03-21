@@ -1,0 +1,38 @@
+  $("#total_1").text(tot_1)
+
+
+     if($("#total_1").text().includes('-')){
+                var s = $("#total_1").text()
+                //console.log("innn",s.replace(/[^a-zA-Z1-9 ]/g, ""))
+                 var tots = parseInt(rate) - parseInt(s.replace(/[^a-zA-Z1-9 ]/g, ""))
+             }else{
+                  var tots = parseInt(rate) - parseInt($("#total_1").text())
+             }
+        // console.log("ssssssssss",$("#total_1").text())
+        console.log("deccc",tots)
+        $("#total_1").text(Math.abs(tots))
+        $("#quantity_" + id).val(newQuantity)
+        localStorage.setItem("total_1",Math.abs(tots))
+
+
+
+        /////items
+
+              {{#each item}}
+        <div style="margin-top: 10px;" class="col-sm">
+          <div class="card" style="width: 18rem;">
+            <img src={{this.item_image}} class="card-img-top" style="height: 250px;" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{this.item_name}}</h5>
+              <p>Non veg</p>
+              <p class="card-text">${{this.item_rate}}</p>
+              <button type="submit" id="cartFun" onclick="cart('{{this._id}}')" class="btn btn-danger">add to
+                cart</button>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+
+
+        sec = tmLXfonlaggdaRhtlA0ONBJx
+        id = rzp_test_mVjfIxanXColF7

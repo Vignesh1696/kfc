@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 10px;
+        background-color: red;
+        padding: 10px;
+      }
+
+      .orderIn{
+        background-color: red;
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 30px;
+        text-align: center;
+      }
+      .orderOut{
+        background-color: red;
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 30px;
+        text-align: center;
+      }
+      .grid-container2{
+         display: grid;
+          grid-template-columns: repeat(1, 1fr);
+      }
+    </style>
+  </head>
+ 
+  <body>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+     <div class="container">
+         <h2 style="text-align: center;background-color: red"> <img src="//images.ctfassets.net/wtodlh47qxpt/25FSYFuEtGct8NSrtpKe6d/b602f6fe0bf294e6a6dff5d7648bf594/KFC_Logo.svg"></img></h2>
+            <div class="container">
+        <div style="height: 500px;" class="row">
+            <div class="col-6 orderIn">
+               <h2 style="border:3px solid rgba(0, 0, 0, 0.8)">ORDER-PROGRESS</h2> 
+                 <div class="container">
+                    <div class="row id" >
+                     {{#each orders}}
+                        <div style="margin-bottom:5px;margin-right:8px; background-color: white;
+                                 border: 3px solid rgba(0, 0, 0, 0.8);" class="col-3">
+                        <p>{{this}}</p>
+                        </div>
+                        {{/each}}
+
+                </div>
+                 </div>
+                
+            </div>
+              <div class="col-6 orderOut">
+                <h2 style="border:3px solid rgba(0, 0, 0, 0.8)">ORDER-READY</h2>
+                 <div class="container">
+                    <div class="row id" >
+                    {{#each over}}
+                        <div style="margin-bottom:5px;margin-right:8px;background-color: white;
+                                 border: 3px solid rgba(0, 0, 0, 0.8);" class="col-3">
+                        <p>{{this}}</p>
+                        </div>
+                      {{/each}}
+
+                </div>
+                 </div>
+              </div>
+            </div>
+            </div>
+     </div>
+  </div>
+  </body>
+ <footer class="bg-light py-3">
+  <div class="container">
+    <p class="text-center"><img src="//images.ctfassets.net/wtodlh47qxpt/25FSYFuEtGct8NSrtpKe6d/b602f6fe0bf294e6a6dff5d7648bf594/KFC_Logo.svg"></img> Copyright © KFC Corporation 2021 All Rights Reserved</p>
+  </div>
+</footer>
+</html>

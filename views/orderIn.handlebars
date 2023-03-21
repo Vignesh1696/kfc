@@ -1,0 +1,214 @@
+<html>
+
+<head>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"
+    type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+<script>
+  var flag = false
+  var flag2 = false;
+  var fullName;
+  var access_token;
+  $(document).ready(function () {
+
+
+    flag = localStorage.getItem('token')
+    fullName = localStorage.getItem('user') ? localStorage.getItem('user') : false;
+    access_token = localStorage.getItem('token') ? localStorage.getItem('token') : false;
+    if (fullName) {
+      $('#user_name').text("Hello" + " " + fullName)
+      $('#logInfo').text('logOut')
+      $('#cartImg').attr("href", `/view-cart?user=${access_token}`)
+      $('#logInfo').attr("href", '/logout')
+    } else {
+      $('#logInfo').text('logIn')
+      $('#logInfo').attr("href", '/login')
+    }
+    console.log(flag, fullName)
+  })
+  var x = document.getElementById("demo");
+  function getLocation() {
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+
+  function showPosition(position) {
+    $('#demo').text(`Your Latitude:${position.coords.latitude}& Your Longitude:${position.coords.longitude}`)
+  }
+
+  function cart(data) {
+    if (flag) {
+      var dataToSend = {
+        product_id: data,
+        quantity: 1,
+        token: flag
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "/cart",
+        data: dataToSend,
+        success: function (response) {
+          // Handle the response here
+          console.log(response);
+          window.location.assign(`/view-cart?user=${dataToSend.token}`);
+        },
+        error: function (xhr, status, error) {
+          // Handle errors here
+          console.log(xhr.responseText);
+        }
+      });
+
+    } else {
+      window.location.assign('/login');
+    }
+
+  }
+</script>
+
+<body>
+  {{#if access_token}}
+  <script type="text/javascript" async>
+    const token = '{{access_token}}';
+    const name = '{{fullName}}'
+    localStorage.setItem("token", token)
+    localStorage.setItem("user", name)
+  </script>
+  {{else}}
+  <script type="text/javascript" async>
+    const token = '{{access_token}}';
+    if (window.location.href.includes("logout")) {
+      localStorage.clear();
+      window.location.href('/')
+    }
+
+    console.log("call")
+  </script>
+  {{/if}}
+  <div>
+    <p onclick="getLocation()" id="demo" style="text-align: center;font-family: cursive;cursor:pointer">
+      <i style="color:red" class="fa fa-map-marker" aria-hidden="true"></i>
+      Allow location access for local store menu and promos
+    </p>
+  </div>
+  <hr>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="/"><img src="https://online.kfc.co.in/static/media/kfcLogo.492728c6.svg"></img></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/view-item">Menu</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/deal">Deals</a>
+          </li>
+          <li class="nav-item">
+
+          </li>
+        </ul>
+
+      </div>
+      <form class="form-inline my-2 my-lg-0">
+        <p id="user_name" style="font-family: cursive;
+    margin-bottom: 1px;"></p>
+
+        <a class="nav-link mr-sm-2" id="logInfo" style="color:black"></a>
+        {{!-- {{else}}
+        <a class="nav-link mr-sm-2" style="color:black" href="/login">Login</a>
+        {{/if}} --}}
+        <a id="cartImg"> <img style="
+    height: 49px;
+    margin: -20px;cursor: pointer;
+" src="https://images.ctfassets.net/wtodlh47qxpt/6qtBVFuno7pdwOQ9RIvYm9/d13e9b7242980972cf49beddde2cc295/bucket_cart_icon.svg"></img></a>
+
+      </form>
+    </div>
+    </div>
+  </nav>
+  <img style="max-width: 100%;"
+    src="https://images.ctfassets.net/wtodlh47qxpt/4gztBB8yAvtp6jV7JAuLD/093fddbb77a78a44a4d3d5e066c592de/KFC_Peri_Peri_Banner__1440x396px.jpg?w=1536&fit=fill&fm=webp"
+    alt="">
+
+  <div class="container">
+    <p style="
+    font-size: 41px;
+    font-family: cursive;
+    padding: 33px;
+">WELCOME TO KFC!</p>
+    <p style="
+  border-bottom: 2px solid #e3e3e3;
+   font-size:30px;
+    font-style: oblique;
+    font-family: fantasy;
+">Browse Categories</p>
+    <div class="horizontal-line"></div>
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+      {{#each Cat}}
+      <a href='/view-item?item={{this._id}}'>
+        <div class="card zoom-img" style="width: 18rem;margin: 25px;cursor: pointer;border-radius: 30px;">
+          <img class="card-img-top" src={{this.category_image}} alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text" style="font-family: cursive;text-align: center;font-weight: 700;color: black;">
+              {{this.name}}</p>
+            {{!-- <p class="card-text" style="font-family: cursive;">{{this.description}}</p> --}}
+          </div>
+        </div>
+      </a>
+      {{/each}}
+    </div>
+  </div>
+
+
+</body>
+<footer class="bg-light py-3 footer">
+  <div class="container">
+    <p class="text-center"><img
+        src="//images.ctfassets.net/wtodlh47qxpt/25FSYFuEtGct8NSrtpKe6d/b602f6fe0bf294e6a6dff5d7648bf594/KFC_Logo.svg"></img>
+      Copyright © KFC Corporation 2021 All Rights Reserved</p>
+  </div>
+</footer>
+<style>
+  .zoom-img img {
+
+
+    object-fit: cover;
+    transition: all .3s ease;
+  }
+
+  .zoom-img img:hover {
+    border-radius: 69px;
+    transform: scale(1.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16), 0 4px 10px rgba(0, 0, 0, 0.23);
+  }
+</style>
+
+</html>

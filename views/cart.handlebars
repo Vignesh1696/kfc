@@ -1,0 +1,335 @@
+<html>
+
+<head>
+    
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"
+        type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<script>
+
+/////////////
+
+ var options = {
+       "key": "rzp_test_mVjfIxanXColF7", 
+       "amount": "49900", 
+       "currency": "INR",
+       "name": "Dummy Academy",
+       "description": "Pay & Checkout this Course, Upgrade your DSA Skill",
+        "image": "https://media.geeksforgeeks.org/wp-content/uploads/20210806114908/dummy-200x200.png",
+       "handler": function (response){
+          window.location.assign('/')
+           alert("This step of Payment Succeeded");
+       },
+       "prefill": {
+          //Here we are prefilling random contact
+         "contact":"9876543210", 
+           //name and email id, so while checkout
+         "name": "Twinkle Sharma",  
+         "email": "smtwinkle@gmail.com"
+       },
+      "notes" : {
+         "description":"Best Course for SDE placements",
+         "language":"Available in 4 major Languages JAVA, C/C++, Python, Javascript",
+         "access":"This course have Lifetime Access"
+       }, 
+       "theme": {
+           "color": "#2300a3"
+       }
+   };
+
+///////////////
+    function incrementQuantity(id, rate, to1) {
+        var inputQuantityElement = $("#quantity_" + id);
+        if (parseInt($(inputQuantityElement).val()) < 10) {
+            var newQuantity = parseInt($(inputQuantityElement).val()) + 1;
+
+            $("#quantity_" + id).val(newQuantity);
+
+            //api call for quantaty update
+            let dataToSend = {
+                item: id,
+                token: access_token,
+                quantity: newQuantity
+            }
+            $.ajax({
+                type: "PUT",
+                url: "/cart-quantity-update",
+                data: dataToSend,
+                success: function (response) {
+                    // Handle the response here
+                    console.log(response);
+                    window.location.assign(`/view-cart?user=${access_token}`);
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors here
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+    }
+
+    function decrementQuantity(id, rate, to1) {
+
+        var inputQuantityElement = $("#quantity_" + id);
+        if (parseInt($(inputQuantityElement).val()) > 1) {
+            var newQuantity = parseInt($(inputQuantityElement).val()) - 1;
+            //api call
+            let dataToSend = {
+                item: id,
+                token: access_token,
+                quantity: newQuantity
+            }
+            $.ajax({
+                type: "PUT",
+                url: "/cart-quantity-update",
+                data: dataToSend,
+                success: function (response) {
+                    // Handle the response here
+                    console.log(response);
+                    window.location.assign(`/view-cart?user=${access_token}`);
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors here
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+    }
+
+    var fullName;
+    var access_token;
+    $(document).ready(function () {
+        fullName = localStorage.getItem('user') ? localStorage.getItem('user') : false;
+        access_token = localStorage.getItem('token') ? localStorage.getItem('token') : false;
+    })
+
+    function removeItem(item_id) {
+        console.log("aaaa", item_id)
+        if (access_token) {
+            let dataToSend = {
+                id: item_id,
+                token: access_token
+            }
+            $.ajax({
+                type: "PUT",
+                url: "/cart-remove-item",
+                data: dataToSend,
+                success: function (response) {
+                    // Handle the response here
+                    console.log(response);
+                    window.location.assign(`/view-cart?user=${access_token}`);
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors here
+                    console.log(xhr.responseText);
+                }
+            });
+
+        }
+    }
+    function check(cartId,totAmont,subTot){
+        localStorage.setItem('totAmount',totAmont)
+          localStorage.setItem('subAmount',subTot)
+      window.location.assign(`/checkout?cart=${cartId}&user=${access_token}`)  
+
+    }
+</script>
+
+<body>
+    <div class="container-fluids">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin: 45px;">
+
+            <a class="navbar-brand" href="/"><img
+                    src="https://online.kfc.co.in/static/media/kfcLogo.492728c6.svg"></img></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/view-item">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/deal">Deals</a>
+                    </li>
+                    <li class="nav-item">
+
+                    </li>
+                </ul>
+
+            </div>
+            <div>
+                <form class="form-inline my-2 my-lg-0">
+
+                    <a class="nav-link mr-sm-2" style="color:black" href=''>Account</a>
+
+                    <img style="
+    height: 49px;
+    margin: -20px;
+" src="https://images.ctfassets.net/wtodlh47qxpt/6qtBVFuno7pdwOQ9RIvYm9/d13e9b7242980972cf49beddde2cc295/bucket_cart_icon.svg"></img>
+                </form>
+            </div>
+
+    </div>
+    </nav>
+    </div>
+    <div class="container-fluids" style="    margin-top: -28px;
+    background-color: black;
+    padding: 18px;">
+        <p style="text-align: center; color:white;"><i class="fa fa-map-marker" aria-hidden="true"></i> Delivery to:
+            Church Road, Paneer Nagar, Mogappair, Chennai, Tamil Nadu</p>
+    </div>
+    <h3 style="    font-family: cursive;
+    margin-left: 164px;
+    margin-top: 47px;
+    font-weight: bold;">MY CART</h3>
+    {{#if count }}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-lg-9">
+                {{#each cart.items}}
+
+                <div class="row"
+                    style="    margin: 35px; background-color: whitesmoke; border-radius: 10px;    box-shadow: 10px 5px 5px #d3c6c6;">
+                    <div class="clearfix col">
+                        <img class="pull-left" style="height: 80px; width: 80px; border-radius: 23px;"
+                            src={{this.item.item_image}}></img>
+                        <div style=" margin-top: 8px; margin-left: 117px;">
+                            <p style="font-family: cursive;font-weight: 800;">{{this.item.item_name}}</p>
+                            <a style="font-size: smaller; font-family: cursive;cursor: pointer;"
+                                onclick="removeItem('{{this._id}}')">Remove</a>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group pull-left" style="width: 111px;margin-top: 20px; margin-left: -84px;">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary"
+                                    onclick="decrementQuantity('{{this.item._id}}','{{this.item.item_rate}}','{{../total}}')"
+                                    type="button" id="decrement-btn">-</button>
+                            </div>
+                            {{!-- <input type="number" class="form-control" name="quantity" id="quantity"
+                                aria-label="Quantity"> {{quantity}}</input> --}}
+                            <input class="form-control" id="quantity_{{this.item._id}}" max="10" min="1"
+                                value="{{this.quantity}}"></input>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary"
+                                    onclick="incrementQuantity('{{this.item._id}}','{{this.item.item_rate}}','{{../total}}')"
+                                    type="button" id="increment-btn">+</button>
+                            </div>
+                        </div>
+                        <p style="margin-top: 26px;margin-left: 76px;font-family: cursive;font-size: large;">$
+                            {{this.item.item_rate}}
+                        </p>
+                    </div>
+                </div>
+                {{/each}}
+
+            </div>
+
+            <div class=" col-sm-12 col-lg-3">
+                <div class="card justify-content-lg-center"
+                    style="margin-top:40px;margin-bottom:34px;border-radius: 13px;margin-left: -42px;    box-shadow: 10px 5px 5px #d3c6c6;">
+                    <div class="card-body" style="background-color: whitesmoke;text-align: center;">
+                        <h5 class="card-title" style="    font-weight: 800;">{{count}} Items</h5>
+                        <p class="para pull-left mb-2">SubTotal</p>
+                        <p class=" para card-text" id="total_1" style="margin-left: 165px;">{{total}}</p>
+                        <p class="para pull-left mb-2">GST</p>
+                        <p class="para card-text" style="margin-left: 165px;">$30</p>
+                        <p class="para pull-left mb-2">Resturant fees</p>
+                        <p class="para card-text" style=" margin-left: 165px;">$40</p>
+                        <hr>
+                        <p class="para pull-left mb-2">Total Bill</p>
+                        <p class="para card-text" style=" margin-left: 165px;">{{sub}}</p>
+                        <br>
+                        <button type="button" onclick="check('{{cart._id}}','{{sub}}','{{total}}')" id="pay-button" style="border-radius: 55px;"
+                            class="btn btn-danger btn-lg btn-block">Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div style="text-align:center;">
+            <a style="color: black;
+    font-family: cursive;" href="/"> <i class="fa fa-arrow-circle-o-left"></i> Get More Menu</a>
+        </div>
+
+
+
+    </div>
+    {{else}}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="cart-empty">
+                    <img src="https://bakestudio.in/assets/images/cart/empty-cart.gif" alt="Empty Cart">
+                    <h2 class="para">Your Cart is Empty</h2>
+                    <div style="text-align:center;">
+                        <a style="color: black;
+    font-family: cursive;" href="/"> <i class="fa fa-arrow-circle-o-left"></i> Get More Menu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{/if}}
+</body>
+<footer class="bg-light py-3">
+    <div class="container">
+        <p class="text-center"><img
+                src="//images.ctfassets.net/wtodlh47qxpt/25FSYFuEtGct8NSrtpKe6d/b602f6fe0bf294e6a6dff5d7648bf594/KFC_Logo.svg"></img>
+            Copyright © KFC Corporation 2021 All Rights Reserved</p>
+    </div>
+</footer>
+<style>
+    .para {
+        font-family: cursive;
+    }
+
+    .cart-empty {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .cart-empty img {
+        width: 300px;
+        height: 230px;
+        margin-bottom: 30px;
+    }
+
+    .cart-empty h2 {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+
+    .cart-empty p {
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+
+    .cart-empty .btn-primary {
+        font-size: 20px;
+        padding: 10px 30px;
+    }
+</style>
+
+</html>
